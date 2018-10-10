@@ -52,7 +52,7 @@ function subscribe() {
 function sendTokenToServer(currentToken) {
     if (!isTokenSentToServer(currentToken)) {
         console.log('Отправка токена на сервер...');
-
+        alert(currentToken);
         var url = '/save_token'; // адрес скрипта на сервере который сохраняет ID устройства
         $.post(url, {
             token: currentToken
