@@ -13,12 +13,15 @@
 <script>
     // firebase_subscribe.js
 
+    firebase.initializeApp({
+        messagingSenderId: '789231606288'
+    });
 
     // браузер поддерживает уведомления
     // вообще, эту проверку должна делать библиотека Firebase, но она этого не делает
     alert('Js is working!');
     if ('Notification' in window) {
-
+        var messaging = firebase.messaging();
         alert(11);
 
         // пользователь уже разрешил получение уведомлений
@@ -29,18 +32,15 @@
 
         // по клику, запрашиваем у пользователя разрешение на уведомления
         // и подписываем его
-        $('#subscribe').on('click', function () {
-            subscribe();
-        });
+        //$('#subscribe').on('click', function () {
+          //  subscribe();
+        //});
     } else {
         alert('Cant show notification in this browser!!!');
     }
 
     function subscribe() {
-        firebase.initializeApp({
-            messagingSenderId: '789231606288'
-        });
-        var messaging = firebase.messaging();
+
         // запрашиваем разрешение на получение уведомлений
         alert('In subscribe');
         messaging.requestPermission()
