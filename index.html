@@ -4,54 +4,93 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- <script type="text/javascript" src="http://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script> -->
+    <script type="text/javascript" src="http://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
     <!-- <script type="text/javascript" src="static/firebase_subscribe.js"></script> -->
 </head>
 <body>
-<button type="button" id="subscribe" onclick="sendNotification('Я зделяль!!', {
-body: 'Урааааа!!!!',
-icon: 'https://res.cloudinary.com/dat1ywyio/image/upload/c_scale,h_100,w_100/v1536157456/photo_2018-08-16_19-53-24_krmcua.jpg',
-dir: 'auto'
-});">Notify me!</button>
+<button type="button" id="subscribe" onclick="">Notify me!</button>
 
 <script>
-function sendNotification(title, options) {
-// Проверим, поддерживает ли браузер HTML5 Notifications
-    if (!("Notification" in window)) {
-        alert('Ваш браузер не поддерживает HTML Notifications, его необходимо обновить.');
+    // firebase_subscribe.js
+firebase.initializeApp({
+    messagingSenderId: '789231606288'
+});
+
+// браузер поддерживает уведомления
+// вообще, эту проверку должна делать библиотека Firebase, но она этого не делает
+if ('Notification' in window) {
+    var messaging = firebase.messaging();
+    alert(11);
+
+    // пользователь уже разрешил получение уведомлений
+    // подписываем на уведомления если ещё не подписали
+    if (Notification.permission === 'granted') {
+        subscribe();
     }
 
-// Проверим, есть ли права на отправку уведомлений
-    else if (Notification.permission === "granted") {
-// Если права есть, отправим уведомление
+    // по клику, запрашиваем у пользователя разрешение на уведомления
+    // и подписываем его
+    $('#subscribe').on('click', function () {
+        subscribe();
+    });
+}
 
-        var notification = new Notification(title, options);
+function subscribe() {
+    // запрашиваем разрешение на получение уведомлений
+    alert('In subscribe');
+    messaging.requestPermission()
+        .then(function () {
+            // получаем ID устройства
+            alert('Getting token');
+            messaging.getToken()
+                .then(function (currentToken) {
+                    alert('Check console for token');
+                    console.log(currentToken);
 
+                    if (currentToken) {
+                        sendTokenToServer(currentToken);
+                    } else {
+                        console.warn('Не удалось получить токен.');
+                        setTokenSentToServer(false);
+                    }
+                })
+                .catch(function (err) {
+                    console.warn('При получении токена произошла ошибка.', err);
+                    setTokenSentToServer(false);
+                });
+    })
+    .catch(function (err) {
+        console.warn('Не удалось получить разрешение на показ уведомлений.', err);
+    });
+}
 
-        function clickFunc() {
-            alert('Пользователь кликнул на уведомление');
-        }
+// отправка ID на сервер
+function sendTokenToServer(currentToken) {
+    if (!isTokenSentToServer(currentToken)) {
+        console.log('Отправка токена на сервер...');
 
-        notification.onclick = clickFunc;
-    }
-
-// Если прав нет, пытаемся их получить
-    else if (Notification.permission !== 'denied') {
-        Notification.requestPermission(function (permission) {
-// Если права успешно получены, отправляем уведомление
-            if (permission === "granted") {
-
-                var notification = new Notification(title, options);
-
-
-            } else {
-                alert('Вы запретили показывать уведомления'); // Юзер отклонил наш запрос на показ уведомлений
-            }
+        var url = ''; // адрес скрипта на сервере который сохраняет ID устройства
+        $.post(url, {
+            token: currentToken
         });
+
+        setTokenSentToServer(currentToken);
     } else {
-// Пользователь ранее отклонил наш запрос на показ уведомлений
-// В этом месте мы можем, но не будем его беспокоить. Уважайте решения своих пользователей.
+        console.log('Токен уже отправлен на сервер.');
     }
+}
+
+// используем localStorage для отметки того,
+// что пользователь уже подписался на уведомления
+function isTokenSentToServer(currentToken) {
+    return window.localStorage.getItem('sentFirebaseMessagingToken') == currentToken;
+}
+
+function setTokenSentToServer(currentToken) {
+    window.localStorage.setItem(
+        'sentFirebaseMessagingToken',
+        currentToken ? currentToken : ''
+    );
 }
 </script>
 
