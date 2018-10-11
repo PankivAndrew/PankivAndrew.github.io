@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
+    <!-- <script type="text/javascript" src="http://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script> -->
     <!-- <script type="text/javascript" src="static/firebase_subscribe.js"></script> -->
 </head>
 <body>
-<button type="button" id="subscribe" onclick="sendNotification('Верните Линуса!', {
-body: 'Тестирование HTML5 Notifications',
-icon: 'https://res.cloudinary.com/dat1ywyio/image/upload/c_scale,h_40,w_40/v1536157456/photo_2018-08-16_19-53-24_krmcua.jpg',
+<button type="button" id="subscribe" onclick="sendNotification('Я зделяль!!', {
+body: 'Урааааа!!!!',
+icon: 'https://res.cloudinary.com/dat1ywyio/image/upload/c_scale,h_100,w_100/v1536157456/photo_2018-08-16_19-53-24_krmcua.jpg',
 dir: 'auto'
 });">Notify me!</button>
 
@@ -40,9 +40,9 @@ function sendNotification(title, options) {
         Notification.requestPermission(function (permission) {
 // Если права успешно получены, отправляем уведомление
             if (permission === "granted") {
-                alert('Here1');
+
                 var notification = new Notification(title, options);
-                alert('Here2');
+
 
             } else {
                 alert('Вы запретили показывать уведомления'); // Юзер отклонил наш запрос на показ уведомлений
