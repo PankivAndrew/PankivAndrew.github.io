@@ -37,8 +37,9 @@ if ('Notification' in window) {
 } else {
     alert('Cant show notification in this browser!!!');
 }
-var messaging = firebase.messaging();
+
 function subscribe() {
+    var messaging = firebase.messaging();
     // запрашиваем разрешение на получение уведомлений
     alert('In subscribe');
     messaging.requestPermission()
