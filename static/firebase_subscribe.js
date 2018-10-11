@@ -2,11 +2,11 @@
 firebase.initializeApp({
     messagingSenderId: '789231606288'
 });
-
 // браузер поддерживает уведомления
 // вообще, эту проверку должна делать библиотека Firebase, но она этого не делает
 if ('Notification' in window) {
     var messaging = firebase.messaging();
+    alert(22);
 
     // пользователь уже разрешил получение уведомлений
     // подписываем на уведомления если ещё не подписали
@@ -16,10 +16,10 @@ if ('Notification' in window) {
 
     // по клику, запрашиваем у пользователя разрешение на уведомления
     // и подписываем его
-    $('#subscribe').on('click', function () {
-        alert(1);
-        subscribe();
-    });
+    // $('#subscribe').on('click', function () {
+    //     alert(1);
+    //     subscribe();
+    // });
 }
 
 function subscribe() {
