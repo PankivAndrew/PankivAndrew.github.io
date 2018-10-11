@@ -13,21 +13,28 @@
 <script>
     // firebase_subscribe.js
 
-    //firebase.initializeApp({
-      //  messagingSenderId: '789231606288'
-    //});
+    firebase.initializeApp({
+        messagingSenderId: '789231606288'
+    });
 
     // браузер поддерживает уведомления
     // вообще, эту проверку должна делать библиотека Firebase, но она этого не делает
     alert('Js is working!');
     if ('Notification' in window) {
-        //var messaging = firebase.messaging();
+        var messaging = firebase.messaging();
         alert(11);
 
         // пользователь уже разрешил получение уведомлений
         // подписываем на уведомления если ещё не подписали
+        if (Notification.permission !== 'granted') {
+            messaging.requestPermission();
+
+        } else {
+            subscribe();
+        }
         if (Notification.permission === 'granted') {
             subscribe();
+
         }
 
         // по клику, запрашиваем у пользователя разрешение на уведомления
@@ -40,12 +47,7 @@
     }
 
     function subscribe() {
-
-        // запрашиваем разрешение на получение уведомлений
-        alert('In subscribe');
-        messaging.requestPermission()
-            .then(function () {
-                // получаем ID устройства
+        // получаем ID устройства
                 alert('Getting token');
                 messaging.getToken()
                     .then(function (currentToken) {
@@ -63,10 +65,6 @@
                         console.warn('При получении токена произошла ошибка.', err);
                         setTokenSentToServer(false);
                     });
-            })
-            .catch(function (err) {
-                console.warn('Не удалось получить разрешение на показ уведомлений.', err);
-            });
     }
 
     // отправка ID на сервер
