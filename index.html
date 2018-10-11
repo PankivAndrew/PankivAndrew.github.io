@@ -33,6 +33,8 @@ if ('Notification' in window) {
     $('#subscribe').on('click', function () {
         subscribe();
     });
+} else {
+    alert('Cant show notification in this browser!!!');
 }
 
 function subscribe() {
