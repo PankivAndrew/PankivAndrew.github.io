@@ -8,8 +8,8 @@
     <!-- <script type="text/javascript" src="static/firebase_subscribe.js"></script> -->
 </head>
 <body>
-<button type="button" id="subscribe" onclick="subscribe()">Notify me!</button>
-
+<button type="button" id="subscribe" onclick="subscribe()">Subscribe!</button>
+<p id="token"></p>
 <script>
     // firebase_subscribe.js
 
@@ -40,8 +40,9 @@
                 alert('Getting token');
                 messaging.getToken()
                     .then(function (currentToken) {
-                        alert('Check console for token');
+                        document.getElementById('token').innerText = currentToken;
                         console.log(currentToken);
+                        alert('Check console for token');
 
                     })
                     .catch(function (err) {
@@ -49,6 +50,5 @@
                     });
     }
 </script>
-
 </body>
 </html>
